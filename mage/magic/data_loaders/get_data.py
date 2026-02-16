@@ -32,26 +32,17 @@ schema = {
 total_retries = 10
 @data_loader
 def load_data(page, *args, **kwargs):
-    status_code = None
-    retries = 0
     page_api = page["page"]
+    response = requests.get(
+        BASE_URL,
+        params = {"per_page":200, "page":page_api},
+        timeout = 20
+    )
     
-    while retries < total_retries:
-        response = requests.get(
-            BASE_URL,
-            params = {"per_page":200, "page":page_api},
-            timeout = 20
-        )
-        
-        if response.status_code != 200:
-            retries += 1
-            sleep(5)
-        else:
-            data = pl.DataFrame(response.json(), schema = schema)
-            break
+    response.raise_for_status()
+    data = pl.DataFrame(response.json(), schema = schema)
 
-
-    return data, page_api, retries
+    return data, page_api
 
 
 @test
@@ -75,9 +66,3 @@ def test_no_page(output, page, *args) -> None:
     """
     assert page is not None or page > 0 , 'No Data'
 
-@test
-def test_retries(output, page, retries, *args) -> None:
-    """
-    Template code for testing the output of the block.
-    """
-    assert retries <= total_retries , f'Some problem at API, retries: {retries} '
