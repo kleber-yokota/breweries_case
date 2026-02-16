@@ -1,0 +1,14 @@
+triggers:
+- description: null
+  envs: []
+  last_enabled_at: 2026-02-16 00:10:46.530975
+  name: silver layer
+  pipeline_uuid: silver_layer
+  schedule_interval: null
+  schedule_type: api
+  settings: null
+  sla: null
+  start_time: 2026-02-16 00:07:00
+  status: active
+  token: c3e284eaac554196a38a800b2dca8af4
+  variables: {}

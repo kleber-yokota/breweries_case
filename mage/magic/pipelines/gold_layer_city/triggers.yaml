@@ -1,0 +1,14 @@
+triggers:
+- description: null
+  envs: []
+  last_enabled_at: 2026-02-16 01:01:33.643560
+  name: enchanted feather
+  pipeline_uuid: gold_layer_city
+  schedule_interval: null
+  schedule_type: api
+  settings: null
+  sla: null
+  start_time: 2026-02-16 00:39:00
+  status: active
+  token: fd4f537d274c49dab232c1f850ff3bd5
+  variables: {}
