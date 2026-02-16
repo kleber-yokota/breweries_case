@@ -1,0 +1,131 @@
+services:
+  seaweed-master:
+    image: chrislusf/seaweedfs:4.12
+    container_name: seaweed-master
+    command: master -ip=seaweed-master -port=9333
+    ports:
+      - "9333:9333"
+    networks:
+      - lake
+
+  seaweed-volume:
+    image: chrislusf/seaweedfs:4.12
+    container_name: seaweed-volume
+    command: volume -mserver="seaweed-master:9333" -ip=seaweed-volume -port=8080 -dir=/data
+    depends_on:
+      - seaweed-master
+    networks:
+      - lake
+
+  seaweed-filer:
+    image: chrislusf/seaweedfs:4.12
+    container_name: seaweed-filer
+    command: filer -master="seaweed-master:9333" -ip=seaweed-filer
+    ports:
+      - "8888:8888"
+    depends_on:
+      - seaweed-master
+      - seaweed-volume
+    networks:
+      - lake
+
+  seaweed-s3:
+    image: chrislusf/seaweedfs:4.12
+    container_name: seaweed-s3
+    command: >
+      s3
+      -filer=seaweed-filer:8888
+      -port=8333
+      -config=/etc/seaweedfs/s3.json
+    volumes:
+      - ./s3.json:/etc/seaweedfs/s3.json:ro
+    ports:
+      - "8333:8333"
+    depends_on:
+      - seaweed-filer
+    networks:
+      - lake
+
+  init-buckets:
+    image: amazon/aws-cli:2.15.0
+    container_name: init-buckets
+    depends_on:
+      - seaweed-s3
+    volumes:
+      - ./init-buckets.sh:/init-buckets.sh:ro
+    entrypoint: ["/bin/sh", "/init-buckets.sh"]
+    networks:
+      - lake
+
+  spark:
+    build:
+      context: ./image/spark
+    container_name: spark
+    depends_on:
+      - init-buckets
+    networks:
+      - lake
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    tty: true
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    volumes:
+      - ./spark_jobs:/opt/spark/work-dir
+    env_file:
+      - .env
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+
+  spark-worker:
+    build:
+      context: ./image/spark
+    container_name: spark-worker
+    depends_on:
+      - spark
+    networks:
+      - lake
+    tty: true
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+      spark://spark:7077
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+
+    volumes:
+      - ./spark_jobs:/opt/spark/work-dir
+
+  mage:
+    build:
+      context: ./image/mage
+    container_name: magic
+    command: mage start magic
+    depends_on:
+      init-buckets:
+        condition: service_completed_successfully
+
+    env_file:
+      - .env
+    environment:
+      ENV: dev
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_ENDPOINT: ${AWS_ENDPOINT}
+    ports:
+      - 6789:6789
+    volumes:
+      - ./mage/magic/data_loaders:/home/src/magic/data_loaders
+      - ./mage/magic/data_exporters:/home/src/magic/data_exporters
+      - ./mage/magic/transformers:/home/src/magic/transformers
+      - ./mage/magic/io_config.yaml:/home/src/magic/io_config.yaml
+      - ./mage/magic/metadata.yaml:/home/src/magic/metadata.yaml
+      - ./mage/magic/pipelines:/home/src/magic/pipelines
+      - ./mage/magic/custom:/home/src/magic/custom
+    restart: on-failure:5
+    networks:
+      - lake
+
+networks:
+  lake:
