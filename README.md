@@ -2,7 +2,6 @@
 
 [![Python](https://img.shields.io/badge/python-3.10-blue)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/docker-enabled-blue)](https://www.docker.com/)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
 
 ## Table of Contents
 1. [Objective](#objective)
