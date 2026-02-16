@@ -1,0 +1,14 @@
+triggers:
+- description: null
+  envs: []
+  last_enabled_at: 2026-02-16 00:18:37.969259
+  name: veiled warrior
+  pipeline_uuid: bronze_layer
+  schedule_interval: '@once'
+  schedule_type: time
+  settings: null
+  sla: null
+  start_time: 2026-02-15 00:18:00
+  status: active
+  token: b2d90538431a4432b66d5a12bf13ff0f
+  variables: {}

@@ -1,0 +1,14 @@
+version: 0.1.1
+default:
+  # Default profile created for data IO access.
+  # Add your credentials for the source you use, and delete the rest.
+  # AWS
+  AWS_ACCESS_KEY_ID: {{ env_var('AWS_ACCESS_KEY_ID') }}
+  AWS_SECRET_ACCESS_KEY: {{ env_var('AWS_SECRET_ACCESS_KEY') }}
+  AWS_ENDPOINT: {{ env_var('AWS_ENDPOINT') }}
+  AWS_REGION: us-west-1
+  # AWS_EC2_METADATA_DISABLED: "true"
+  # MAGE_S3_ENDPOINT_URL: http://seaweed-s3:8333
+  # S3_ALLOW_PATH_STYLE: true
+  # Algolia
+  

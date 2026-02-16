@@ -1,0 +1,27 @@
+project_type: standalone
+
+variables_dir: ~/.mage_data
+
+remote_variables_dir: s3a://mage
+
+variables_retention_period: '90d'
+
+retry_config:
+  retries: 3
+  delay: 5
+  max_delay: 60
+  exponential_backoff: false
+
+
+help_improve_mage: true
+notification_config:
+  alert_on:
+  - trigger_failure
+  - trigger_passed_sla
+  slack_config:
+    webhook_url: "{{ env_var('MAGE_SLACK_WEBHOOK_URL') }}"
+  teams_config:
+    webhook_url: "{{ env_var('MAGE_TEAMS_WEBHOOK_URL') }}"
+project_uuid: c9fdfb23405e4621b876015d5f9cb11e
+cache_block_output_in_memory: true
+run_pipeline_in_one_process: true

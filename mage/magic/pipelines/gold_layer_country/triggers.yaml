@@ -1,0 +1,14 @@
+triggers:
+- description: null
+  envs: []
+  last_enabled_at: 2026-02-16 00:49:39.644045
+  name: kind bard
+  pipeline_uuid: gold_layer_country
+  schedule_interval: null
+  schedule_type: api
+  settings: null
+  sla: null
+  start_time: 2026-02-16 00:55:00
+  status: active
+  token: f79cc4ca00784948be373674c6899346
+  variables: {}

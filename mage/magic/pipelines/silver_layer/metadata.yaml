@@ -1,0 +1,97 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - great_tree
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: spark silver
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks: []
+  uuid: spark_silver
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dynamic: true
+  downstream_blocks:
+  - symmetrical_aspen
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: great tree
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_loader
+  upstream_blocks:
+  - spark_silver
+  uuid: great_tree
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: symmetrical aspen
+  retry_config: null
+  status: executed
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - great_tree
+  uuid: symmetrical_aspen
+cache_block_output_in_memory: false
+callbacks: []
+concurrency_config: {}
+conditionals: []
+created_at: '2026-02-15 18:51:24.401454+00:00'
+data_integration: null
+description: silver
+executor_config: {}
+executor_count: 1
+executor_type: null
+extensions: {}
+name: silver layer
+notification_config: {}
+remote_variables_dir: s3a://mage
+retry_config: {}
+run_pipeline_in_one_process: false
+settings:
+  triggers: null
+spark_config:
+  app_name: OpenBrewery
+  custom_session_var_name: spark
+  others:
+    spark.driver.cores: 2
+    spark.driver.memory: 2g
+    spark.executor.cores: 2
+    spark.executor.memory: 2g
+    spark.hadoop.fs.s3a.access.key: any
+    spark.hadoop.fs.s3a.aws.credentials.provider: org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider
+    spark.hadoop.fs.s3a.connection.ssl.enabled: 'false'
+    spark.hadoop.fs.s3a.endpoint: http://seaweed-s3:8333
+    spark.hadoop.fs.s3a.impl: org.apache.hadoop.fs.s3a.S3AFileSystem
+    spark.hadoop.fs.s3a.path.style.access: 'true'
+    spark.hadoop.fs.s3a.secret.key: any
+    spark.sql.catalog.spark_catalog: org.apache.spark.sql.delta.catalog.DeltaCatalog
+    spark.sql.extensions: io.delta.sql.DeltaSparkSessionExtension
+  spark_jars:
+  - /opt/spark/jars/hadoop-aws-3.3.4.jar
+  - /opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
+  - /opt/spark/jars/delta-spark_2.12-3.1.0.jar
+  - /opt/spark/jars/delta-storage-3.1.0.jar
+  spark_master: spark://spark:7077
+tags: []
+type: python
+uuid: silver_layer
+variables_dir: /home/src/mage_data/magic
+widgets: []
