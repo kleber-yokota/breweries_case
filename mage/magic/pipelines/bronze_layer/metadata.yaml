@@ -16,7 +16,7 @@ blocks:
   retry_config:
     delay: 0
     retries: 3
-  status: failed
+  status: updated
   timeout: '30'
   type: data_loader
   upstream_blocks:

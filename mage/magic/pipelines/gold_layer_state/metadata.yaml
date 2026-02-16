@@ -40,9 +40,9 @@ spark_config:
   custom_session_var_name: spark
   others:
     spark.driver.cores: 2
-    spark.driver.memory: 2g
+    spark.driver.memory: 8g
     spark.executor.cores: 2
-    spark.executor.memory: 2g
+    spark.executor.memory: 8g
     spark.hadoop.fs.s3a.access.key: any
     spark.hadoop.fs.s3a.aws.credentials.provider: org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider
     spark.hadoop.fs.s3a.connection.ssl.enabled: 'false'
